@@ -8,19 +8,24 @@
     "net7.0": []
   },
   "packageFolders": {
-    "C:\\Users\\Monster\\.nuget\\packages\\": {}
+    "C:\\Users\\SABAH\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Monster\\Desktop\\05.04 MVC\\05.04.23\\yedek 1\\Bloggie\\Bloggie.Web\\Bloggie.Web.csproj",
+      "projectUniqueName": "C:\\Users\\SABAH\\Desktop\\MVC\\Bloggie\\Bloggie.Web\\Bloggie.Web.csproj",
       "projectName": "Bloggie.Web",
-      "projectPath": "C:\\Users\\Monster\\Desktop\\05.04 MVC\\05.04.23\\yedek 1\\Bloggie\\Bloggie.Web\\Bloggie.Web.csproj",
-      "packagesPath": "C:\\Users\\Monster\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Monster\\Desktop\\05.04 MVC\\05.04.23\\yedek 1\\Bloggie\\Bloggie.Web\\obj\\",
+      "projectPath": "C:\\Users\\SABAH\\Desktop\\MVC\\Bloggie\\Bloggie.Web\\Bloggie.Web.csproj",
+      "packagesPath": "C:\\Users\\SABAH\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\SABAH\\Desktop\\MVC\\Bloggie\\Bloggie.Web\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "C:\\Users\\Monster\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\SABAH\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
