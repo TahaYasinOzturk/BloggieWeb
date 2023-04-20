@@ -1,3 +1,6 @@
+using Bloggie.Web.Data;
+using Microsoft.EntityFrameworkCore;
+
 namespace Bloggie.Web
 {
     //Program.cs dosyasý. Uygulamanýn konfigürasyon ayarlarýnýn yapýldýgý uygulamanýn basladýgý dosyadýr. 5.0 ise startup dosyasý bulunur baslama noktasý için. 5.0 dan sonra program.cs icine geldi.
@@ -10,6 +13,8 @@ namespace Bloggie.Web
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            //var app = builder.Build(); önce connectionstringi  cagýrýyoruz db contexti programa tanýttýk. 
+            builder.Services.AddDbContext<BloggieDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("BloggieDbConnectionString")));
 
             var app = builder.Build();
 
