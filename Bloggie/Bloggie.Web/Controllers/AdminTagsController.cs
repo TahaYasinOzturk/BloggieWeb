@@ -65,7 +65,24 @@ namespace Bloggie.Web.Controllers
             //veri girişini yaptık CRUD daki Add işlemi gerçekleşti. siteden veri submitledik sonra  ssms de execute diyip gelenleri gördük.
 
             //Submit işlemi gerçekleştikten sonra bizi Add.cshtml de tutmasını istiyoruz.
-            return View("Add");
+            //return View("Add");
+            // Step:4 Submit işlemi gerçekleştikten sonra bizi List.cshtml e göndermesini istiyoruz.
+            return RedirectToAction("List");
+
+
+
+        }
+        //Step:1 Tagleri Listeleme  
+        [HttpGet]
+        public IActionResult List()
+        {
+            //use dbcontext to read tags (tag(hashtag)leri okuyabilmek adına dbcontextimiz ile ilişki kurduk).Akabinde bu tagleri ait olan view sayfamıza yolladık(List.cshtml).
+            var tags=bloggieDbContext.Tags.ToList(); // Db den Tags  verileri getir listele.
+            return View(tags); //listcshtml e gönderiyoruz tags yazarak. to list ile herseyi listeledik.birde list e sag tik view dedik ve view admintags altında list olusturdu.
+            //Step:2 List.cshtml i olusturduk sonra Step:3) layout da dropdown altına bir Tag list ekledik asp-action List yaptık sonra da add tag yaptıktan sonra yukarda Step:4) add kısmında 
+            //return View("Add"); yazan yeri  //return RedirectToAction("List"); yapıyoruz Add Submit deyince oraya yönlendiriyor.
+
+
         }
     }
 }
