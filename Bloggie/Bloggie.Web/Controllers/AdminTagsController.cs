@@ -82,7 +82,39 @@ namespace Bloggie.Web.Controllers
             //Step:2 List.cshtml i olusturduk sonra Step:3) layout da dropdown altına bir Tag list ekledik asp-action List yaptık sonra da add tag yaptıktan sonra yukarda Step:4) add kısmında 
             //return View("Add"); yazan yeri  //return RedirectToAction("List"); yapıyoruz Add Submit deyince oraya yönlendiriyor.
 
+            //Step:6  List e edit yeri ekledik  <td><a asp-action="Edit" asp-controller="AdminTags" asp-route-id="@item.Id">Edit</a></td>  
+            //asp-route-id="@item.Id"  asp-route-x  x yerine istedigini yaz ordan bilgileri cekiyoruz edit üstüne geldigimizde sol allta id ler her bir edit icin  farklı geliyor sol attlat url uzantısı görünüyor ve tıklandıgında ise o params li url sayfasına yönlendiriyor.. 
+              //https://localhost:7170/AdminTags/Edit/d70c5459-8bf7-4ec3-54a8-08db35e3ac21
+              //    pattern: "{controller=Home}/{action=Index}/{id?}"  id kismini yapmıs olduk asp-route-id ile yaptık.
+            //Step:7 sonra Edit list olusturduk düzenledik.
+        }
+        //Step:5) edit i tanımlıyoruz.
+        [HttpGet]
+        public IActionResult Edit(Guid id)
+        {
+            //Step:8 1.Yöntem  
+            //var tag = bloggieDbContext.Tags.Find(id);
+            // 2. Yöntem  Step: 9) sonra viewmodel icin edittagrequest olusturduk domain tagden bakıp kopyaladik.
+            var tag = bloggieDbContext.Tags.FirstOrDefault(x => x.Id == id); // obje yakalasın tag degsikene atsın.
 
+            //Step:10 veriye find or first le eriştik. edit  fonksiyone Guid id yolladık. 
+            if (tag != null) 
+            {
+                var editTagRequest = new EditTagRequest // yeni obje olusturduk burda esleştirme yaptık aradıgımız nesnedekilerle atamasını yaptık viewmodel üzerinden artık cekebiliriz.
+                {   Id= tag.Id,
+                    Name = tag.Name, 
+                    DisplayName = tag.DisplayName 
+                };
+                return View(editTagRequest);  // edit tag requestin icini oku 
+            }
+
+            return View(null); //diger türlü boş yolla yada yazmana gerek yok.edit sayfasına gidiyoz.
+
+            //Step:11 edit.cs sayfası düzenledik asagıdaki asp-for="Id"  normalde işlevi yok zaten ayni sayfadayız. ilerde belki lazım olur.
+            //< div class="mb-3">
+            //    <label class="form-label">Id</label>
+            //    <input type = "text" class="form-control" id="id" asp-for="Id" readonly />
+            //</div>
         }
     }
 }
