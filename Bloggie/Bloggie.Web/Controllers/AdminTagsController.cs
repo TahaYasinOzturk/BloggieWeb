@@ -77,7 +77,11 @@ namespace Bloggie.Web.Controllers
         public IActionResult List()
         {
             //use dbcontext to read tags (tag(hashtag)leri okuyabilmek adına dbcontextimiz ile ilişki kurduk).Akabinde bu tagleri ait olan view sayfamıza yolladık(List.cshtml).
-            var tags=bloggieDbContext.Tags.ToList(); // Db den Tags  verileri getir listele.
+            //@model List<Bloggie.Web.Models.Domain.Tag>
+            //domain deki tag model üzerindeki verileri listele  List.cshtml
+
+            var tags =bloggieDbContext.Tags.ToList(); // Db den Tags  verileri getir listele.
+
             return View(tags); //listcshtml e gönderiyoruz tags yazarak. to list ile herseyi listeledik.birde list e sag tik view dedik ve view admintags altında list olusturdu.
             //Step:2 List.cshtml i olusturduk sonra Step:3) layout da dropdown altına bir Tag list ekledik asp-action List yaptık sonra da add tag yaptıktan sonra yukarda Step:4) add kısmında 
             //return View("Add"); yazan yeri  //return RedirectToAction("List"); yapıyoruz Add Submit deyince oraya yönlendiriyor.
@@ -89,17 +93,19 @@ namespace Bloggie.Web.Controllers
             //Step:7 sonra Edit list olusturduk düzenledik.
         }
         //Step:5) edit i tanımlıyoruz.
+        //Edit get metodu için view sayfamıza verilerin ulaştırılacağı bir view model hazırladık. Bu view model üzerinde id name ve display name olarak üç özellik tanımladık. Metodumuza parametre olarak Guid tipinde id yolladık. Ve cshtml dosyasında model olarak bu view modeli kullandık. Daha öncesinde list sayfasındaki edit butonunda asp-route-id olarak id tanımlaması yaptığımız için doğrudan bu idye ait olan veriler ekrana controllerın aşağıdaki hali sayesinde geliyor oldu. aşağıda parametre olarak gönderilen id ile veritabanı sorgusu yaparak bu idye denk gelen objeyi çağırmış olduk ve viewmodeldaki propertyler bu objeyle eşitlendi. View sayfası da model olarak bu viewmodeli kullandığı için verilerimiz get metoduyla otomatik olarak ilgili inputlara yüklenmiş oldu. 
         [HttpGet]
         public IActionResult Edit(Guid id)
         {
             //Step:8 1.Yöntem  
             //var tag = bloggieDbContext.Tags.Find(id);
             // 2. Yöntem  Step: 9) sonra viewmodel icin edittagrequest olusturduk domain tagden bakıp kopyaladik.
-            var tag = bloggieDbContext.Tags.FirstOrDefault(x => x.Id == id); // obje yakalasın tag degsikene atsın.
+            var tag = bloggieDbContext.Tags.FirstOrDefault(x => x.Id == id); // sorguyla obje yakalasın tag degsikene atsın.
 
             //Step:10 veriye find or first le eriştik. edit  fonksiyone Guid id yolladık. 
             if (tag != null) 
             {
+                //gelen veriyi viewmodela yolladık ara katmana da bunları eşitledik viewmodel degişmiş oldu. sonra update yaıcaz .+ idler  edittagrequeste götürdük  asp-for ile. yaptık.+ orda dönen submit post metodu kullanır edit cs sayfasında . 
                 var editTagRequest = new EditTagRequest // yeni obje olusturduk burda esleştirme yaptık aradıgımız nesnedekilerle atamasını yaptık viewmodel üzerinden artık cekebiliriz.
                 {   Id= tag.Id,
                     Name = tag.Name, 
@@ -111,10 +117,38 @@ namespace Bloggie.Web.Controllers
             return View(null); //diger türlü boş yolla yada yazmana gerek yok.edit sayfasına gidiyoz.
 
             //Step:11 edit.cs sayfası düzenledik asagıdaki asp-for="Id"  normalde işlevi yok zaten ayni sayfadayız. ilerde belki lazım olur.
+
             //< div class="mb-3">
             //    <label class="form-label">Id</label>
             //    <input type = "text" class="form-control" id="id" asp-for="Id" readonly />
             //</div>
         }
+
+
+        //Step:12  Post için metodu yazdık 
+        //Post işlemi için ilgili edit sayfamızda model olarak kullandığımız edittagrequest isimli viewmodelımızı yine kullanıyor olacağız. Çünkü formumuz post işlemi submit etmektedir. Bu yüzden aynı isimdeki IActionResult üzerindeki HttpPost olan kısım çalışıyor olacaktır. Öncelikle Veritabanı modelimiz olan Tag model üzerinden yeni bir nesne üretim propertylerini viewmodella eşitliyoruz. Sonrasında bu idye id olan veritabanı nesnemizi bulmak için find metodu kullanıyoruz. Bu bu id ait olan nesnenin veritabanındaki prpertylerini yeni oluşturmuş olduğumuz tag nesnesinin propertyleriyle eşitleyerek yeni atamayı yapmış oluyoruz. Akabinde savechanges diyerek veritabanını güncellemiş oluyoruz.
+
+        [HttpPost]
+        public IActionResult Edit(EditTagRequest editTagRequest) // edit.cs deki 
+        {
+            var tag = new Tag
+            {
+                Id = editTagRequest.Id,
+                Name = editTagRequest.Name,
+                DisplayName = editTagRequest.DisplayName,
+            };
+            var existingTag = bloggieDbContext.Tags.Find(tag.Id); // mevcut olanı bulduk edittagrequest üzerinden bulduk. 
+            if (existingTag != null) // eger null degilse
+            {
+                existingTag.Name = tag.Name;                    // bunları eşlestir ve degistir yaptık
+                existingTag.DisplayName = tag.DisplayName;
+
+                bloggieDbContext.SaveChanges();             // degişiklikleri kaydettik
+                return RedirectToAction("List");  // list sayfasına geri yollar.
+            }
+            return View();
+        }
+
+
     }
 }
