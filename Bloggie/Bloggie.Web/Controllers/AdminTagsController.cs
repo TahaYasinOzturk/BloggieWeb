@@ -128,6 +128,9 @@ namespace Bloggie.Web.Controllers
         //Step:12  Post için metodu yazdık 
         //Post işlemi için ilgili edit sayfamızda model olarak kullandığımız edittagrequest isimli viewmodelımızı yine kullanıyor olacağız. Çünkü formumuz post işlemi submit etmektedir. Bu yüzden aynı isimdeki IActionResult üzerindeki HttpPost olan kısım çalışıyor olacaktır. Öncelikle Veritabanı modelimiz olan Tag model üzerinden yeni bir nesne üretim propertylerini viewmodella eşitliyoruz. Sonrasında bu idye id olan veritabanı nesnemizi bulmak için find metodu kullanıyoruz. Bu bu id ait olan nesnenin veritabanındaki prpertylerini yeni oluşturmuş olduğumuz tag nesnesinin propertyleriyle eşitleyerek yeni atamayı yapmış oluyoruz. Akabinde savechanges diyerek veritabanını güncellemiş oluyoruz.
 
+        //step:13 Delete butonu ekleyecegiz editte 
+        //<button type="submit" class="btn btn-dark ms-2">Delete</button> ekledik
+
         [HttpPost]
         public IActionResult Edit(EditTagRequest editTagRequest) // edit.cs deki 
         {
@@ -149,6 +152,50 @@ namespace Bloggie.Web.Controllers
             return View();
         }
 
+        //[HttpPost]
+        //public IActionResult Delete(EditTagRequest editTagRequest)
+        //{
+        //    var tag = bloggieDbContext.Tags.Find(editTagRequest.Id);
+
+        //    if(tag != null)
+        //    {
+        //        bloggieDbContext.Tags.Remove(tag);
+        //        bloggieDbContext.SaveChanges();
+
+        //        //show a success notification  istersen ekle biz eklemedik
+
+        //        return RedirectToAction("List");
+        //    }
+        //    //showing notification error
+        //    return View();
+        //}
+
+
+
+        //2.yöntem   deletei list  sayfasına  koyduk.  
+        //<button type="submit" asp-controller="AdminTags" asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-dark ms-2">Delete</button> editte ise asp-route-id model id ekledik ama bundan öncede calısıyordu . guid id yolladik asadıga ve delete butonuna basınca sildi aynı sayfa icerisinde. 
+        //[HttpPost]
+        //public IActionResult Delete(EditTagRequest editTagRequest)
+        //{
+        //    var tag = bloggieDbContext.Tags.Find(editTagRequest.Id);
+        //bunu yoruma  aldık sonra altta  Guid id ile cektigimiz deletein post methodunu düzenledik   (taghelpers a bak.)
+        [HttpPost]
+        public IActionResult Delete(Guid id)
+        {
+            var tag = bloggieDbContext.Tags.Find(id);
+
+            if (tag != null)
+            {
+                bloggieDbContext.Tags.Remove(tag);
+                bloggieDbContext.SaveChanges();
+
+                //show a success notification  istersen ekle biz eklemedik
+
+                return RedirectToAction("List");
+            }
+            //showing notification error
+            return View();
+        }
 
     }
 }

@@ -29,7 +29,12 @@
                             <td>@item.Id</td>
                             <td>@item.Name</td>
                             <td>@item.DisplayName</td>
-                            <td><a asp-action="Edit" asp-controller="AdminTags" asp-route-id="@item.Id">Edit</a></td>
+                            <td class="d-flex justify-content-between">
+                                <a asp-action="Edit" class="btn btn-primary w-100 mx-2" asp-controller="AdminTags" asp-route-id="@item.Id">Edit</a>
+                                <form method="post">
+                                    <button asp-controller="AdminTags" asp-action="Delete" asp-route-id="@item.Id" type="submit" class=" btn btn-danger w-100">DELETE</button>
+                                </form>
+                            </td>
                         </tr>
                     }
                 </tbody>
