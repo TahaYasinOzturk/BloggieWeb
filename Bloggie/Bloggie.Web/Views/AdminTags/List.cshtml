@@ -30,9 +30,12 @@
                             <td>@item.Name</td>
                             <td>@item.DisplayName</td>
                             <td class="d-flex justify-content-between">
-                                <a asp-action="Edit" class="btn btn-primary w-100 mx-2" asp-controller="AdminTags" asp-route-id="@item.Id">Edit</a>
-                                <form method="post">
-                                    <button asp-controller="AdminTags" asp-action="Delete" asp-route-id="@item.Id" type="submit" class=" btn btn-danger w-100">DELETE</button>
+                                <div class="btn-group btn-group-sm" role="group">
+                                <a asp-action="Edit" class="btn btn-primary px-2" asp-controller="AdminTags" asp-route-id="@item.Id">Edit</a>
+                                <button asp-controller="AdminTags" asp-action="Delete" asp-route-id="@item.Id" form="myfrom" type="submit" class=" btn btn-danger px-2 ">DELETE</button>
+                                </div>
+                                <form method="post" id="myfrom">
+                                   
                                 </form>
                             </td>
                         </tr>
@@ -40,5 +43,9 @@
                 </tbody>
             </table>
         </div>
+
+    }else
+    {
+        <h1>There are no tags to display! (-.-)</h1>
     }
 </div>
