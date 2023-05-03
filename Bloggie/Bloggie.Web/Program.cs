@@ -1,4 +1,5 @@
 using Bloggie.Web.Data;
+using Bloggie.Web.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace Bloggie.Web
@@ -15,8 +16,9 @@ namespace Bloggie.Web
             builder.Services.AddControllersWithViews();
             //var app = builder.Build(); önce connectionstringi  cagýrýyoruz db contexti programa tanýttýk. 
             builder.Services.AddDbContext<BloggieDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("BloggieDbConnectionString")));
+			builder.Services.AddScoped<ITagInterface, TagRepository>();
 
-            var app = builder.Build();
+			var app = builder.Build();
 
             // Configure the HTTP request pipeline.
             //app. diyerek kullandýgýmýz request sürecindeki tüm özellikler aþagýda tanýmlanmýþtýr. Ýþimize yarayacak olan özelliklerin tamamýný da app. diyerek tanýmlýyor olacagýz. örnegin aþagýda app.UseAuthorization() özelligi request pipeline a tanýmlanmýstýr.

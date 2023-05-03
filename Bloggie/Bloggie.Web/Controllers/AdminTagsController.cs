@@ -1,6 +1,7 @@
 ﻿using Bloggie.Web.Data;
 using Bloggie.Web.Models.Domain;
 using Bloggie.Web.Models.ViewModels;
+using Bloggie.Web.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,14 +9,15 @@ namespace Bloggie.Web.Controllers
 {
     public class AdminTagsController : Controller
     {
-        private readonly BloggieDbContext bloggieDbContext;
-        //DbContext icin dependency injection işlemi gerçekleştirildi.
+		private readonly ITagInterface tagRepository;
 
-        //db ye postla  veri göndercez önce ctor yapıyoz .using Bloggie.Web.Data; ekledi.BloggieDbContext bloggieDbContext isimde atadık aynı isimle sonra ctrl. yaptık ikinci olana tıkladık. creat field .. yazıyordu.
-        public AdminTagsController(BloggieDbContext bloggieDbContext)
+		//DbContext icin dependency injection işlemi gerçekleştirildi.
+
+		//db ye postla  veri göndercez önce ctor yapıyoz .using Bloggie.Web.Data; ekledi.BloggieDbContext bloggieDbContext isimde atadık aynı isimle sonra ctrl. yaptık ikinci olana tıkladık. creat field .. yazıyordu.
+		public AdminTagsController(ITagInterface tagRepository)
         {
-            this.bloggieDbContext = bloggieDbContext;
-        }
+			this.tagRepository = tagRepository;
+		}
         //yapmıs oldugumuz MVC routing sekli sunun gibi olacaktır.  Admintags controller
         //Add de action tarafı [HttpGet] arka planda calısır.
         //http://localhost:154/AdminTags/Add
@@ -61,8 +63,8 @@ namespace Bloggie.Web.Controllers
                 DisplayName = addTagRequest.DisplayName,
             };
 
-            await bloggieDbContext.Tags.AddAsync(tag);
-            await bloggieDbContext.SaveChangesAsync();
+            await tagRepository.AddAsync(tag);
+            
             //veri girişini yaptık CRUD daki Add işlemi gerçekleşti. siteden veri submitledik sonra  ssms de execute diyip gelenleri gördük.
 
             //Submit işlemi gerçekleştikten sonra bizi Add.cshtml de tutmasını istiyoruz.
@@ -77,13 +79,14 @@ namespace Bloggie.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> ListAsync()
         {
-            //use dbcontext to read tags (tag(hashtag)leri okuyabilmek adına dbcontextimiz ile ilişki kurduk).Akabinde bu tagleri ait olan view sayfamıza yolladık(List.cshtml).
-            //@model List<Bloggie.Web.Models.Domain.Tag>
-            //domain deki tag model üzerindeki verileri listele  List.cshtml
+			//use dbcontext to read tags (tag(hashtag)leri okuyabilmek adına dbcontextimiz ile ilişki kurduk).Akabinde bu tagleri ait olan view sayfamıza yolladık(List.cshtml).
+			//@model List<Bloggie.Web.Models.Domain.Tag>
+			//domain deki tag model üzerindeki verileri listele  List.cshtml
 
-            var tags = await bloggieDbContext.Tags.ToListAsync(); // Db den Tags  verileri getir listele.
+			//var tags = await bloggieDbContext.Tags.ToListAsync(); // Db den Tags  verileri getir listele.
+			var tags = await tagRepository.GetAllAsync();
 
-            return View(tags); //listcshtml e gönderiyoruz tags yazarak. to list ile herseyi listeledik.birde list e sag tik view dedik ve view admintags altında list olusturdu.
+			return View(tags); //listcshtml e gönderiyoruz tags yazarak. to list ile herseyi listeledik.birde list e sag tik view dedik ve view admintags altında list olusturdu.
             //Step:2 List.cshtml i olusturduk sonra Step:3) layout da dropdown altına bir Tag list ekledik asp-action List yaptık sonra da add tag yaptıktan sonra yukarda Step:4) add kısmında 
             //return View("Add"); yazan yeri  //return RedirectToAction("List"); yapıyoruz Add Submit deyince oraya yönlendiriyor.
 
@@ -98,13 +101,14 @@ namespace Bloggie.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> EditAsync(Guid id)
         {
-            //Step:8 1.Yöntem  
-            //var tag = bloggieDbContext.Tags.Find(id);
-            // 2. Yöntem  Step: 9) sonra viewmodel icin edittagrequest olusturduk domain tagden bakıp kopyaladik.
-            var tag =  await bloggieDbContext.Tags.FirstOrDefaultAsync(x => x.Id == id); // sorguyla obje yakalasın tag degsikene atsın.
-
-            //Step:10 veriye find or first le eriştik. edit  fonksiyone Guid id yolladık. 
-            if (tag != null) 
+			//Step:8 1.Yöntem  
+			//var tag = bloggieDbContext.Tags.Find(id);
+			// 2. Yöntem  Step: 9) sonra viewmodel icin edittagrequest olusturduk domain tagden bakıp kopyaladik.
+			//var tag =  await bloggieDbContext.Tags.FirstOrDefaultAsync(x => x.Id == id); // sorguyla obje yakalasın tag degsikene atsın.
+			
+			var tag = await tagRepository.GetAsync(id);
+			//Step:10 veriye find or first le eriştik. edit  fonksiyone Guid id yolladık. 
+			if (tag != null) 
             {
                 //gelen veriyi viewmodela yolladık ara katmana da bunları eşitledik viewmodel degişmiş oldu. sonra update yaıcaz .+ idler  edittagrequeste götürdük  asp-for ile. yaptık.+ orda dönen submit post metodu kullanır edit cs sayfasında . 
                 var editTagRequest = new EditTagRequest // yeni obje olusturduk burda esleştirme yaptık aradıgımız nesnedekilerle atamasını yaptık viewmodel üzerinden artık cekebiliriz.
@@ -141,16 +145,27 @@ namespace Bloggie.Web.Controllers
                 Name = editTagRequest.Name,
                 DisplayName = editTagRequest.DisplayName,
             };
-            var existingTag = await bloggieDbContext.Tags.FindAsync(tag.Id); // mevcut olanı bulduk edittagrequest üzerinden bulduk. 
-            if (existingTag != null) // eger null degilse
-            {
-                existingTag.Name = tag.Name;                    // bunları eşlestir ve degistir yaptık
-                existingTag.DisplayName = tag.DisplayName;
+			//var existingTag = await bloggieDbContext.Tags.FindAsync(tag.Id); // mevcut olanı bulduk edittagrequest üzerinden bulduk. 
+			//if (existingTag != null) // eger null degilse
+   //         {
+   //             existingTag.Name = tag.Name;                    // bunları eşlestir ve degistir yaptık
+   //             existingTag.DisplayName = tag.DisplayName;
 
-                await bloggieDbContext.SaveChangesAsync();             // degişiklikleri kaydettik
-                return RedirectToAction("List");  // list sayfasına geri yollar.
-            }
-            return View();
+   //             await bloggieDbContext.SaveChangesAsync();             // degişiklikleri kaydettik
+   //             return RedirectToAction("List");  // list sayfasına geri yollar.
+   //         }
+			var updatedTag = await tagRepository.UpdateAsync(tag);
+			if (updatedTag != null)
+			{
+				return RedirectToAction("List");
+				//Success notification
+
+			}
+			else
+			{
+				//Error notification
+			}
+			return View();
         }
 
         //[HttpPost]
@@ -181,14 +196,13 @@ namespace Bloggie.Web.Controllers
         //    var tag = bloggieDbContext.Tags.Find(editTagRequest.Id);
         //bunu yoruma  aldık sonra altta  Guid id ile cektigimiz deletein post methodunu düzenledik   (taghelpers a bak.)
         [HttpPost]
-        public async Task<IActionResult> Delete(Guid id)
+        public async Task<IActionResult> DeleteAsync(Guid id)
         {
-            var tag = await bloggieDbContext.Tags.FindAsync(id);
+			var deletedTag = await tagRepository.DeleteAsync(id);
 
-            if (tag != null)
+			if (deletedTag != null)
             {
-                bloggieDbContext.Tags.Remove(tag);
-               await bloggieDbContext.SaveChangesAsync();
+                
 
                 //show a success notification  istersen ekle biz eklemedik
 
