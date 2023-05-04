@@ -3467,11 +3467,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Monster\\Desktop\\06.04 MVC\\05.04.23\\yedek 18\\Bloggie\\Bloggie.Web\\Bloggie.Web.csproj",
+      "projectUniqueName": "C:\\Users\\Monster\\Desktop\\06.04 MVC\\05.04.23\\yedek 20\\Bloggie\\Bloggie.Web\\Bloggie.Web.csproj",
       "projectName": "Bloggie.Web",
-      "projectPath": "C:\\Users\\Monster\\Desktop\\06.04 MVC\\05.04.23\\yedek 18\\Bloggie\\Bloggie.Web\\Bloggie.Web.csproj",
+      "projectPath": "C:\\Users\\Monster\\Desktop\\06.04 MVC\\05.04.23\\yedek 20\\Bloggie\\Bloggie.Web\\Bloggie.Web.csproj",
       "packagesPath": "C:\\Users\\Monster\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Monster\\Desktop\\06.04 MVC\\05.04.23\\yedek 18\\Bloggie\\Bloggie.Web\\obj\\",
+      "outputPath": "C:\\Users\\Monster\\Desktop\\06.04 MVC\\05.04.23\\yedek 20\\Bloggie\\Bloggie.Web\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Monster\\AppData\\Roaming\\NuGet\\NuGet.Config",
