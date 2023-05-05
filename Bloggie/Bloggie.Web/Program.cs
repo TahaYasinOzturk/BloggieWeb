@@ -17,8 +17,9 @@ namespace Bloggie.Web
             //var app = builder.Build(); önce connectionstringi  cagýrýyoruz db contexti programa tanýttýk. 
             builder.Services.AddDbContext<BloggieDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("BloggieDbConnectionString")));
 			builder.Services.AddScoped<ITagInterface, TagRepository>();
+            builder.Services.AddScoped<IBlogPostInterface, BlogPostRepository>();
 
-			var app = builder.Build();
+            var app = builder.Build();
 
             // Configure the HTTP request pipeline.
             //app. diyerek kullandýgýmýz request sürecindeki tüm özellikler aþagýda tanýmlanmýþtýr. Ýþimize yarayacak olan özelliklerin tamamýný da app. diyerek tanýmlýyor olacagýz. örnegin aþagýda app.UseAuthorization() özelligi request pipeline a tanýmlanmýstýr.
