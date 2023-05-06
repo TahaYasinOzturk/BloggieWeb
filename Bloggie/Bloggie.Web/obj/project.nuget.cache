@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "kNM5Xg/2NuV6OKbUCrchP5cx+BcuAYIPJ6n17xXCkN9iQHZugOiUIJxQRTyCmnvvZ2s3W89T9TgHjgqoKuilNA==",
+  "dgSpecHash": "/a3dm0amo8ijOsZg9T4G7s+DksXnfB9tz/xPNmEVBPcjsxapPeeSj0IaTMcuZVuoguyUIIJoHU+zXNMt2t9/GQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Monster\\Desktop\\06.04 MVC\\05.04.23\\yedek 20\\Bloggie\\Bloggie.Web\\Bloggie.Web.csproj",
+  "projectFilePath": "C:\\Users\\Monster\\Desktop\\06.04 MVC\\05.04.23\\yedek 21\\Bloggie\\Bloggie.Web\\Bloggie.Web.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Monster\\.nuget\\packages\\azure.core\\1.24.0\\azure.core.1.24.0.nupkg.sha512",
     "C:\\Users\\Monster\\.nuget\\packages\\azure.identity\\1.6.0\\azure.identity.1.6.0.nupkg.sha512",
